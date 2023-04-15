@@ -1,11 +1,15 @@
-import express from "express";
-const app = express();
-const PORT = 5001;
+import mongoose from "mongoose";
+import app from "./app";
+import env from "./util/vaidateEnv";
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+const port = env.PORT;
 
-app.listen(PORT, () => {
-  console.log("Server is running on port:", PORT);
-});
+mongoose
+  .connect(env.MONGO_CONNECTION_STRING!)
+  .then(() => {
+    console.log("Mongoose connected");
+    app.listen(port, () => {
+      console.log("Server is running on port:", port);
+    });
+  })
+  .catch(console.error);
